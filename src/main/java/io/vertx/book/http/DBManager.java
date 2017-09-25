@@ -90,13 +90,13 @@ public class DBManager extends AbstractVerticle {
             client.rxGetConnection().flatMap(sqlConnection -> {
                 JsonObject jsonObject = new JsonObject();
                 Single<UpdateResult> resultSetSingle = sqlConnection.rxUpdate("insert into table1 (id, searchkey) " +
-                        "values ( '" + UUID.randomUUID().toString() + "', '" + new Random().nextInt() + "')");
+                        "values ( '" + UUID.randomUUID().toString() + "', '" + Math.abs(new Random().nextInt()) + "')");
 
                 for (int i = 0; i < Integer.valueOf(routingContext.pathParam("count")) - 1; i++) {
                     resultSetSingle =
                             resultSetSingle.flatMap(updateResult -> sqlConnection.rxUpdate("insert into table1" +
                                     " (id, searchkey) " +
-                                    "values ( '" + UUID.randomUUID().toString().substring(0,30) + "', '" + Math.abs(new Random().nextInt(100000)) + "')"));
+                                    "values ( '" + UUID.randomUUID().toString().substring(0,30) + "', '" + Math.abs(new Random().nextInt()) + "')"));
                 }
 
                 Single<ResultSet> resultSetOutput =
